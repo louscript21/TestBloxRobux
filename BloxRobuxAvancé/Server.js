@@ -87,22 +87,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 container.appendChild(iframe);
             }
 
-            // Exemple : déclencher un postback quand un gain est reçu
-async function sendRewardToServer(userId, amount) {
-    try {
-        const res = await fetch("https://bloxrobuxbackend.vercel.app/api/timewall", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userId, currencyAmount: amount })
-        });
-        if (!res.ok) throw new Error("Erreur postback Vercel");
-        console.log("✅ Postback envoyé à Vercel");
-    } catch (err) {
-        console.error("❌ Erreur postback :", err);
-    }
-}
-
-
             // Boutons connexion/déco
             const btnInscription = document.getElementById('btn-inscription');
             const btnConnexion = document.getElementById('btn-connexion');
@@ -144,10 +128,6 @@ const API_BASE_URL = location.hostname === "localhost"
     ? "http://localhost:3000"
     : "https://blox-robux.onrender.com";
 
-    const API_BASE_URL2 = location.hostname === "localhost" 
-    ? "http://localhost:3000"
-    : "https://bloxrobux-backend.onrender.com";
-
 async function setRobloxAvatar(robloxName) {
     try {
         const res = await fetch(`${API_BASE_URL}/api/avatar/${robloxName}`);
@@ -186,20 +166,16 @@ async function getRobloxUserId(username) {
 
 async function getPrivateServers(robloxUsername) {
     try {
-        const res = await fetch(`${API_BASE_URL2}/api/privateservers/${robloxUsername}`, {
-            headers: {
-                "x-api-key": "21b4dc719da5c227745e9d1f23ab1cc0"
-            }
-        });
+        const res = await fetch(`${API_BASE_URL}/api/privateservers/${robloxUsername}`);
         const data = await res.json();
 
         const container = document.getElementById("private-servers");
         if (!container) return;
 
         container.innerHTML = "";
-        data.servers.forEach(server => {
+        data.data.forEach(server => {
             const div = document.createElement("div");
-            div.textContent = `${server.name} - Status: ${server.status} - Joueurs: ${server.playing}/${server.maxPlayers}`;
+            div.textContent = `${server.name} - Status: ${server.status}`;
             container.appendChild(div);
         });
 
