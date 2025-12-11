@@ -78,9 +78,9 @@ app.post("/checkAdminCode", (req, res) => {
     res.json({ valid: code === ADMIN_CODE });
 });
 
-app.get("/api/privateservers/:username", async (req, res) => {
+app.get("/api/privateservers", async (req, res) => {
   try {
-    const serversRes = await fetch("https://games.roblox.com/v1/private-servers/my-private-servers", {
+    const serversRes = await fetch("https://games.roblox.com/v1/private-servers/my-private-servers?privateServersTab=1&itemsPerPage=25", {
       headers: { "Cookie": `.ROBLOSECURITY=${process.env.ROBLO_COOKIE}` }
     });
     const data = await serversRes.json();

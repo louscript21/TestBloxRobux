@@ -72,6 +72,8 @@ document.addEventListener("DOMContentLoaded", () => {
             // Avatar Roblox
             setRobloxAvatar(robloxName);
 
+            getPrivateServers();
+
             // === TIMEWALL ===
             const container = document.getElementById("timewall-container");
 
@@ -167,6 +169,8 @@ async function getRobloxUserId(username) {
 async function getPrivateServers() {
     try {
         const res = await fetch(`${API_BASE_URL}/api/privateservers`);
+        if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
+
         const data = await res.json();
 
         const container = document.getElementById("private-servers");
