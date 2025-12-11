@@ -164,23 +164,20 @@ async function getRobloxUserId(username) {
     }
 }
 
-async function getPrivateServers(robloxUsername) {
+async function getPrivateServers() {
     try {
-        const res = await fetch(`${API_BASE_URL}/api/privateservers/${robloxUsername}`, {
-            headers: { "x-api-key": "21b4dc719da5c227745e9d1f23ab1cc0" }
-        });
+        const res = await fetch(`${API_BASE_URL}/api/privateservers`);
         const data = await res.json();
 
         const container = document.getElementById("private-servers");
         if (!container) return;
 
         container.innerHTML = "";
-        data.servers.forEach(server => {
+        data.data.forEach(server => {
             const div = document.createElement("div");
-            div.textContent = `${server.name} - Status: ${server.status} - Joueurs: ${server.playing}/${server.maxPlayers}`;
+            div.textContent = `${server.name} - Status: ${server.active ? "Actif" : "Inactif"} - Joueurs: ${server.playing || 0}/${server.maxPlayers || "?"}`;
             container.appendChild(div);
         });
-
     } catch (err) {
         console.error("Erreur récupération serveurs privés :", err);
     }
