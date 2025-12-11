@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blox Robux - Retirer</title>
+  <link rel="stylesheet" href="styleretirer.css" />
+  <link rel="icon" href="../img/favicon.png" type="image/png">
+</head>
+
+<body>
+  <header>
+  <div class="header-left">
+    <a href="../index.html">
+      <img src="../img/logo.png" alt="Logo Blox Robux" />
+    </a>
+
+    <div class="solde-box">
+      <span>💰 Solde :</span>
+      <span id="balance">0,00 R$</span>
+    </div>
+
+    <div class="text">BloxRobux</div>
+  </div>
+
+  <ul>
+    <li><a href="../index.html">Accueil</a></li>
+      <li><a href="../Page de gain/gagner.html">Gagner des Robux</a></li>
+      <li><a href="retirer.html" class="active">Retirer</a></li>
+  </ul>
+  </header>
+  <main>
+    <section class="retrait-container">
+      <h1>💸 Retirer des Robux</h1>
+      <p class="desc">
+        Entrez le montant de Robux à retirer depuis votre solde ci-dessus.
+      </p>
+
+      <div class="actions">
+        <input id="amount" type="number" placeholder="Montant à retirer (ex : 50)" />
+        <input id="label" type="text" placeholder="Pseudo Roblox" />
+        <button id="withdrawBtn">Retirer</button>
+      </div>
+
+      <div id="error" class="error" style="display:none;"></div>
+
+      <h2>Historique des retraits</h2>
+    </section>
+  </main>
+  <div id="private-servers"></div>
+  <div id="transition" class="fade-transition active">
+    <img src="../img/Robux.png" id="image" alt="Logo Blox Robux" />
+    <div class="text" id="text-chargement">Chargement...</div>
+  </div>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="../Data.js" defer></script>
+  <script src="../Server.js" defer></script>
+  <script src="../Animation.js" defer></script>
+  <script src="../Amount.js" defer></script>
+</body>
+</html>
