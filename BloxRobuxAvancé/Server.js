@@ -166,16 +166,18 @@ async function getRobloxUserId(username) {
 
 async function getPrivateServers(robloxUsername) {
     try {
-        const res = await fetch(`${API_BASE_URL}/api/privateservers/${robloxUsername}`);
+        const res = await fetch(`${API_BASE_URL}/api/privateservers/${robloxUsername}`, {
+            headers: { "x-api-key": "21b4dc719da5c227745e9d1f23ab1cc0" }
+        });
         const data = await res.json();
 
         const container = document.getElementById("private-servers");
         if (!container) return;
 
         container.innerHTML = "";
-        data.data.forEach(server => {
+        data.servers.forEach(server => {
             const div = document.createElement("div");
-            div.textContent = `${server.name} - Status: ${server.status}`;
+            div.textContent = `${server.name} - Status: ${server.status} - Joueurs: ${server.playing}/${server.maxPlayers}`;
             container.appendChild(div);
         });
 
