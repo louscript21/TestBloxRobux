@@ -128,13 +128,14 @@ body {
     height: 50px;
 }
 
-/* Titre centré */
+/* TITRE CENTRÉ */
 .title {
     text-align: center;
-    font-size: 25px;
+    font-size: clamp(18px, 4vw, 25px);
     font-weight: bold;
     color: #2b6ac9;
-    white-space: nowrap;
+    /* on supprime white-space: nowrap pour permettre le retour à la ligne */
+    overflow-wrap: break-word; /* coupe le mot si nécessaire */
 }
 
 /* Menu */
@@ -151,50 +152,49 @@ body {
     border-radius: 50%;
 }
 
-
 /* Liens */
 .nav a {
-  text-decoration: none;
-  color: white;
-  font-weight: bold;
-  transition: color 0.3s;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: color 0.3s;
 }
 
 .nav a:hover {
-  color: #ffea00;
+    color: #ffea00;
 }
 
 /* Profil */
 #lien-profil {
-  background-color: #0e1f44;
-  padding: 6px 12px;
-  border-radius: 10px;
-  color: #ffea00;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 0 6px rgba(0, 255, 106, 0.4);
+    background-color: #0e1f44;
+    padding: 6px 12px;
+    border-radius: 10px;
+    color: #ffea00;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 0 6px rgba(0, 255, 106, 0.4);
 }
 
 /* Avatar */
 #avatar-roblox {
-  width: clamp(28px, 6vw, 40px);
-  height: clamp(28px, 6vw, 40px);
-  border-radius: 50%;
+    width: clamp(28px, 6vw, 40px);
+    height: clamp(28px, 6vw, 40px);
+    border-radius: 50%;
 }
 
-
-/* Responsive pour écran très petit */
+/* RESPONSIVE */
 @media (max-width: 600px) {
-  .title {
-    font-size: clamp(14px, 5vw, 20px);
-    max-width: 50%;
-  }
+    .title {
+        font-size: clamp(14px, 5vw, 20px);
+    }
 
-  .nav {
-    gap: 5px;
-  }
+    .nav {
+        gap: 5px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
 }
 
 

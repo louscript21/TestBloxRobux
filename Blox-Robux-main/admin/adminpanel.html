@@ -124,11 +124,11 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script>
-const db = window.db;
-if (!db) {
-  console.error("Firebase Database non initialisée !");
-} else {
 document.addEventListener("DOMContentLoaded", () => {
+    const db = window.db;
+    if (!db) {
+        console.error("Firebase Database non initialisée !");
+    } else {
     const list = document.getElementById("list");
     const searchInput = document.getElementById("search");
     const nbuInput = document.getElementById("NBU");
@@ -186,8 +186,9 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Erreur connexion ou DB :", err);
             list.innerHTML = "<tr><td colspan='4'>Erreur lors du chargement des utilisateurs.</td></tr>";
         });
+    }
 });
-}
+
 </script>
 <script src="../Data.js" defer></script>
 <script src="../Server.js" defer></script>

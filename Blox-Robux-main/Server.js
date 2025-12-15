@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btnConnexion.href = "./Page de gain/gagner.html";
 
         btnInscription.onclick = () => {
-          if (warn) warn.style.display = "inline-block";
+          if (warn) warn.style.display = "flex";
         };
       }
 
