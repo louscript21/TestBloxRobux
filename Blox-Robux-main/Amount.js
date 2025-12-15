@@ -1,23 +1,25 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     const db = window.db; // récupère la db initialisée dans Data.js
-if (!db) {
-    console.error("Firebase Database n'est pas initialisée !");
-    return;
-}
+    if (!db) {
+        console.error("Firebase Database n'est pas initialisée !");
+        return;
+    }
 
     const balanceEl = document.getElementById("balance");
     const amountEl = document.getElementById("amount");
-    const labelEl = document.getElementById("label");
     const withdrawBtn = document.getElementById("withdrawBtn");
     const transactionsEl = document.getElementById("transactions");
     const errorEl = document.getElementById("error");
-
+    const template = document.getElementById("background")
     const connectedUser = localStorage.getItem("connectedUser");
+    const finalStep = document.getElementById("finalStep")
+    const finalStep2 = document.getElementById("finalStep2")
+    const helpbutton = document.getElementById("HELP")
     if (!connectedUser) {
-        balanceEl.textContent = "0,00 R$";
+        if (balanceEl) balanceEl.textContent = "0.00 R$";
         showError("Vous devez être connecté pour retirer des Robux !");
-        withdrawBtn.disabled = true;
+        if (withdrawBtn) withdrawBtn.disabled = true;
         return;
     }
 
@@ -30,6 +32,28 @@ if (!db) {
     function formatMoney(num) {
         const n = (Math.round((num + Number.EPSILON) * 100) / 100).toFixed(2);
         return n.replace('.', ',') + ' R$';
+    }
+
+    function showTemplate() {
+        template.style.display = "flex"
+        setTimeout(() => {
+            template.classList.add("active")
+            finalStep.classList.add("active")
+        }, 0);
+    }
+
+    function HideTemplate() {
+        setTimeout(() => {
+            finalStep.classList.add("active2")
+        }, 0);
+    }
+
+    function ShowTemplate2() {
+        finalStep.style.display = "none"
+        finalStep2.style.display = "flex"
+        setTimeout(() => {
+            finalStep2.classList.add("active3")
+        }, 0);
     }
 
     function showError(msg) {
@@ -47,11 +71,36 @@ if (!db) {
             return;
         }
 
-        state.transactions.slice().reverse().forEach(tx => {
+        const total = state.transactions.length;
+
+            // Création du header
+        const divHeader = document.createElement("div");
+        divHeader.className = "divHeader";
+        divHeader.innerHTML = `
+            <span>Retrait n° :</span>
+            <span>Retrait ID :</span>
+            <span>Retrait valeur :</span>
+        `;
+        transactionsEl.appendChild(divHeader);
+
+        // Prendre les 10 dernières transactions et les inverser
+        const transactionsToShow = state.transactions.slice(-10).reverse();
+
+        transactionsToShow.forEach((tx, index) => {
+            const order = total - index; // Numéro d'ordre global
+
             const div = document.createElement("div");
             div.className = "transaction";
             div.innerHTML = `
-                <span>${tx.label || 'Retrait'}</span>
+                <span>${order} - Retrait</span>
+                <span class="copy-id" data-copy="${tx.id}">ID : ${tx.id}
+                    <img 
+                        src="../img/copy (2).png"
+                        class="copy-img"
+                        id="copyimg"
+                        data-copy="${tx.id}"
+                    >
+                </span>
                 <span class="neg">${formatMoney(Math.abs(tx.amount))}</span>
             `;
             transactionsEl.appendChild(div);
@@ -59,7 +108,7 @@ if (!db) {
     }
 
     function render() {
-        balanceEl.textContent = formatMoney(state.balance);
+        if (balanceEl) balanceEl.textContent = formatMoney(state.balance);
         renderTransactions();
     }
 
@@ -72,7 +121,7 @@ if (!db) {
     });
 
     // ==================== RETRAIT ====================
-    function addTransaction(value, label) {
+    function addTransaction(value) {
         const amount = Math.round(value * 100) / 100;
 
         if (amount <= 0) return showError("Montant invalide !");
@@ -82,27 +131,35 @@ if (!db) {
             id: Date.now(),
             type: "withdraw",
             amount: -amount,
-            label: label || "Retrait",
             date: new Date().toISOString()
         };
 
         state.balance -= amount;
         state.transactions.push(tx);
 
-        userRef.set({
+        userRef.update({
             balance: state.balance,
             transactions: state.transactions
         }).catch(err => console.error(err));
+
+        render(); // mise à jour immédiate
     }
 
     if (withdrawBtn) {
         withdrawBtn.addEventListener("click", () => {
-        const value = parseFloat(amountEl.value);
-        if (isNaN(value)) return showError("Montant invalide !");
-        addTransaction(value, labelEl.value.trim());
-        amountEl.value = "";
-        labelEl.value = "";
-    });
+            //if (!amountEl) return showError("Champ montant introuvable !");
+            //const value = parseFloat(amountEl.value);
+            //if (isNaN(value)) return showError("Montant invalide !");
+            //addTransaction(value);
+            amountEl.value = "";
+            showTemplate()
+        });
     }
 
+    if (helpbutton) {
+        helpbutton.addEventListener("click", () => {
+            HideTemplate()
+            ShowTemplate2()
+        });
+    }
 });

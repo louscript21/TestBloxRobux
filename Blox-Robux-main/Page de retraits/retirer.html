@@ -5,10 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Blox Robux - Retirer</title>
   <link rel="stylesheet" href="styleretirer.css" />
-  <link rel="icon" href="../img/favicon.png" type="image/png">
+  <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
 </head>
 
 <body>
+    <div class="background" id="background">
+    <div class="Interface" id="finalStep">
+      <p class="explain" id="explain">
+        Veuillez selectionner un de vos emplacements publiques pour effectuer votre transactions.
+        Si aucun serveur n'apparait, veuillez cliquer sur le bouton si dessous.
+      </p>
+      <button id="HELP">Besoin d'aide ?</button>
+        <div class="public-places">
+          <select id="public-places">
+            <option>séléctionner un jeu</option>
+          </select>
+      </div>
+    </div>
+    <div class="Interface2" id="finalStep2"></div>
+  </div>
   <header>
   <div class="header-left">
     <a href="../index.html">
@@ -35,24 +50,23 @@
       <p class="desc">
         Entrez le montant de Robux à retirer depuis votre solde ci-dessus.
       </p>
-
       <div class="actions">
         <input id="amount" type="number" placeholder="Montant à retirer (ex : 50)" />
-        <input id="label" type="text" placeholder="Pseudo Roblox" />
         <button id="withdrawBtn">Retirer</button>
       </div>
 
       <div id="error" class="error" style="display:none;"></div>
 
       <h2>Historique des retraits</h2>
+      <div class="template" id="transactions">aucun retrait effectué...</div>
     </section>
-    <div id="private-servers"></div>
   </main>
   <div id="transition" class="fade-transition active">
     <img src="../img/Robux.png" id="image" alt="Logo Blox Robux" />
     <div class="text" id="text-chargement">Chargement...</div>
   </div>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
   <script src="../Data.js" defer></script>
   <script src="../Server.js" defer></script>
@@ -60,3 +74,6 @@
   <script src="../Amount.js" defer></script>
 </body>
 </html>
+
+
+

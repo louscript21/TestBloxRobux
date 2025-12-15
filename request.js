@@ -37,7 +37,10 @@ app.get("/api/avatar/:username", async (req, res) => {
         const avatarData = await avatarRes.json();
         if (!avatarData.data || avatarData.data.length === 0) return res.status(500).json({ error: "Erreur avatar Roblox" });
 
-        res.json({ avatarUrl: avatarData.data[0].imageUrl });
+        res.json({
+            avatarUrl: avatarData.data[0].imageUrl,
+            targetId: userId
+        });
 
     } catch (err) {
         console.error(err);
@@ -47,21 +50,21 @@ app.get("/api/avatar/:username", async (req, res) => {
 
 // --- Endpoint TimeWall ---
 app.get("/timewall", async (req, res) => {
-    const { userID, transactionID, revenue, currencyAmount, hash, type } = req.query;
+    const { targetId, transactionID, revenue, currencyAmount, hash, type } = req.query;
 
     try {
         const computedHash = crypto.createHash("sha256")
-            .update(userID + revenue + SECRET_KEY)
+            .update(targetId + revenue + SECRET_KEY)
             .digest("hex");
 
         if (computedHash !== hash) return res.status(400).send("Invalid hash");
         if (transactions[transactionID]) return res.status(200).send("duplicate");
 
-        transactions[transactionID] = { userID, revenue, currencyAmount, type, date: Date.now() };
-        if (!users[userID]) users[userID] = { balance: 0 };
-        users[userID].balance += Number(currencyAmount);
+        transactions[transactionID] = { targetId, revenue, currencyAmount, type, date: Date.now() };
+        if (!users[targetId]) users[targetId] = { balance: 0 };
+        users[targetId].balance += Number(currencyAmount);
 
-        console.log(`✅ User ${userID} new balance: ${users[userID].balance}`);
+        console.log(`✅ User ${targetId} new balance: ${users[targetId].balance}`);
         res.status(200).send("OK");
 
     } catch (err) {
@@ -80,7 +83,7 @@ app.post("/checkAdminCode", (req, res) => {
 
 app.get("/api/privateservers", async (req, res) => {
   try {
-    const serversRes = await fetch("https://games.roblox.com/v1/private-servers/my-private-servers?privateServersTab=1&itemsPerPage=25", {
+    const serversRes = await fetch("https://games.roblox.com/v1/private-servers/my-private-servers?privateServersTab=0&itemsPerPage=25", {
       headers: { "Cookie": `.ROBLOSECURITY=${process.env.ROBLO_COOKIE}` }
     });
     const data = await serversRes.json();
@@ -91,7 +94,45 @@ app.get("/api/privateservers", async (req, res) => {
   }
 });
 
+app.get("/api/places", async (req, res) => {
+    const { targetId  } = req.query;
+
+    try {
+        if (!targetId ) {
+            return res.status(400).json({ error: "userId manquant" });
+        }
+
+        const placesRes = await fetch(
+            `https://games.roblox.com/v2/users/${targetId }/games?accessFilter=Public`
+        );
+
+        if (!placesRes.ok) {
+            return res.status(placesRes.status).json({
+                error: "Erreur API Roblox"
+            });
+        }
+
+        const data = await placesRes.json();
+
+        // On renvoie uniquement ce qui est utile au front
+        const formatted = {
+            data: data.data.map(game => ({
+                name: game.name,
+                placeId: game.rootPlace?.id || null
+            })).filter(game => game.placeId !== null)
+        };
+
+        res.json(formatted);
+
+    } catch (err) {
+        console.error("Erreur récupération places :", err);
+        res.status(500).json({ error: "Impossible de récupérer les emplacements" });
+    }
+});
 
 // --- Lancement serveur ---
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Serveur en ligne sur port ${PORT}`));
+
+app.listen(PORT, () => {
+    console.log(`✅ Serveur en ligne sur le port ${PORT}`);
+});
