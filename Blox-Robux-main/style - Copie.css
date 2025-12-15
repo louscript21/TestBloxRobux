@@ -28,7 +28,8 @@ body {
   position: fixed;
   inset: 0;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  gap: 10px;
   justify-content: center;
   align-items: center;
 
@@ -47,12 +48,11 @@ body {
 }
 
 #image {
-  width: clamp(40px, 10vw, 60px);
+  width: clamp(30px, 7vw, 45px);
   height: auto;
 }
 
 .fade-transition .text {
-  margin-top: 10px;
   font-size: clamp(18px, 5vw, 32px);
   font-weight: bold;
   color: #fff;
@@ -114,55 +114,89 @@ body {
 /* ===================== */
 /* HEADER                */
 /* ===================== */
-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-  padding: 15px clamp(15px, 4vw, 30px);
-  background-color: #153369;
+.header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #153369;
+    gap: 20px;
 }
 
-header img {
-  height: clamp(40px, 8vw, 50px);
+/* Logo */
+.logo img {
+    height: 50px;
 }
 
-header div {
-  color: #2b6ac9;
-  font-size: clamp(18px, 4vw, 25px);
-  font-weight: bold;
-  flex: 1;
-  text-align: center;
+/* Titre centré */
+.title {
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    color: #2b6ac9;
+    white-space: nowrap;
 }
 
-header ul {
-  list-style: none;
-  display: flex;
-  gap: clamp(10px, 3vw, 20px);
+/* Menu */
+.nav {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    align-items: center;
 }
 
-header ul li a {
+.nav img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+
+/* Liens */
+.nav a {
   text-decoration: none;
   color: white;
   font-weight: bold;
   transition: color 0.3s;
 }
 
-header ul li a:hover {
+.nav a:hover {
   color: #ffea00;
 }
 
-#lien-Profil {
+/* Profil */
+#lien-profil {
   background-color: #0e1f44;
-  padding: 6px 14px;
+  padding: 6px 12px;
   border-radius: 10px;
   color: #ffea00;
   font-weight: 600;
   display: flex;
   align-items: center;
+  gap: 8px;
   box-shadow: 0 0 6px rgba(0, 255, 106, 0.4);
 }
+
+/* Avatar */
+#avatar-roblox {
+  width: clamp(28px, 6vw, 40px);
+  height: clamp(28px, 6vw, 40px);
+  border-radius: 50%;
+}
+
+
+/* Responsive pour écran très petit */
+@media (max-width: 600px) {
+  .title {
+    font-size: clamp(14px, 5vw, 20px);
+    max-width: 50%;
+  }
+
+  .nav {
+    gap: 5px;
+  }
+}
+
 
 /* ===================== */
 /* CONTENU               */
@@ -199,19 +233,6 @@ header ul li a:hover {
   background-color: #009bf9;
   color: white;
   font-size: clamp(12px, 3vw, 14px);
-}
-
-/* ===================== */
-/* MOBILE AJUSTEMENTS     */
-/* ===================== */
-@media (max-width: 600px) {
-  header {
-    flex-direction: column;
-  }
-
-  header ul {
-    justify-content: center;
-  }
 }
 
 
