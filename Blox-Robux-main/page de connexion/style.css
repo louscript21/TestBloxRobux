@@ -94,11 +94,16 @@ hr {
     gap: 10px;
 }
 
+.password-field {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* espace entre l'input et l'image */
+}
+
 input[type="text"],
-input[type="password"],
-input[type="email"] {
+input[type="password"] {
     flex: 1;
-    padding: 10px;
+    padding: 5px;
     border-radius: 6px;
     border: 1px solid #ccc;
     background-color: #222;
@@ -145,8 +150,6 @@ input[type="submit"]:hover {
   transform: scale(1.1);
 }
 
-
-
 p {
     text-align: center;
     margin: 5px 0;
@@ -181,10 +184,5 @@ p a:hover {
     input[type="submit"] {
         font-size: 14px;
         padding: 8px;
-    }
-
-    .checkbox-text {
-        font-size: 14px;
-        padding: 4px 8px;
     }
 }

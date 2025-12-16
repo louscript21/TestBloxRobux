@@ -57,62 +57,54 @@ body {
 /* ----- HEADER ----- */
 header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 15px 30px;
   background-color: #153369;
-  position: relative; /* nécessaire pour centrer le texte */
+  gap: 20px;
 }
 
-/* Logo + solde */
+/* gauche */
 .header-left {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 10px; /* petit espace entre logo et solde */
+  gap: 10px;
 }
 
-/* Logo */
+/* logo */
 .header-left img {
   height: 50px;
-  display: block;
-  margin: 0;
-  padding: 0;
 }
 
-/* Solde */
-.header-left .solde-box {
-  margin-left: 2.5vw;
+/* solde */
+.solde-box {
   background-color: #0e1f44;
   padding: 8px 14px;
   border-radius: 10px;
   color: #ffea00;
   font-weight: 600;
   display: flex;
-  gap: 5px;
   align-items: center;
+  gap: 5px;
   box-shadow: 0 0 6px rgba(0, 255, 106, 0.4);
 }
 
-/* Texte centré au milieu de l'écran */
-.header-left .text {
-  position:absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 25px;
-  color: #2b6ac9;
+/* titre DANS le flex */
+.header-title {
+  flex: 1;
+  text-align: center;
+  font-size: clamp(18px, 4vw, 25px);
   font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: #2b6ac9;
+  white-space: nowrap;
 }
 
-/* Menu à droite */
+/* menu */
 header ul {
   list-style: none;
   display: flex;
   gap: 20px;
 }
+
 
 header ul li a {
   text-decoration: none;
@@ -136,10 +128,10 @@ main {
   background: #222436;
   padding: 30px;
   border-radius: 15px;
-  width: 90%;
+  width: 100%;
   max-width: 600px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.3);
 }
+
 
 .retrait-container h1 {
   color: #ffea00;
@@ -162,12 +154,13 @@ main {
 }
 
 input {
+  width: 100%;
+  max-width: 400px;
   padding: 10px;
-  border: none;
   border-radius: 8px;
-  width: 400px;
   font-size: 15px;
 }
+
 
 button {
   padding: 10px 40px;
@@ -232,8 +225,9 @@ button:hover {
     margin-bottom: 200px;
     opacity: 0;
     transition: opacity 0.5s ease, margin-bottom 0.5s ease;
-    width: 35%;
-    height: 30%;
+    width: 90%;
+    max-width: 420px;
+    min-height: 220px;
     background-color: #222436;
     border-radius: 20px;
     border: 5px solid black;
@@ -248,8 +242,9 @@ button:hover {
       margin-top: 200px;
     opacity: 0;
     transition: opacity 0.5s ease, margin-top 0.5s ease;
-    width: 35%;
-    height: 30%;
+    width: 90%;
+    max-width: 420px;
+    min-height: 220px;
     background-color: #222436;
     border-radius: 20px;
     border: 5px solid black;
@@ -259,7 +254,7 @@ button:hover {
 }
 
 .explain {
-  font-size: 1.25rem;
+  font-size: clamp(14px, 3.5vw, 20px);
   text-align: center;
   font-family: "BBH Hegarty", sans-serif;
   font-weight: 100;
@@ -340,4 +335,40 @@ button:hover {
   text-align: center;
   color: #777;
   font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  header {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  header ul {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .retrait-container {
+    padding: 20px;
+  }
+
+  .template {
+    font-size: 1rem;
+    padding: 18px;
+  }
+
+  .transaction span {
+    font-size: 14px;
+  }
 }

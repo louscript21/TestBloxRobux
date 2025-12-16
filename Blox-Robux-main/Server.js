@@ -163,8 +163,8 @@ function togglePasswordImage(imgId, inputId) {
 
 // Appel pour chaque input
 togglePasswordImage("checkimg", "loginPassword");
-togglePasswordImage("showPassword2", "password");
-togglePasswordImage("showPassword3", "confirmPassword");
+togglePasswordImage("checkimg2", "password");
+togglePasswordImage("checkimg3", "confirmPassword");
 
 
   document.addEventListener("click", (e) => {
