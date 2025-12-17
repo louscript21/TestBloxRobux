@@ -8,15 +8,49 @@ if (!admin.apps.length) {
 }
 
 const db = admin.database();
+const transactionsRef = db.ref("transactions");
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") return res.status(405).end();
-  
-  const { userId, currencyAmount } = req.body;
-  const userRef = db.ref("users/" + userId + "/balance");
-  const snapshot = await userRef.get();
-  const current = snapshot.exists() ? snapshot.val() : 0;
-  await userRef.set(current + Number(currencyAmount));
+app.get("/timewall", async (req, res) => {
+  const { userID, transactionID, currencyAmount, hash, type } = req.query;
 
-  res.status(200).json({ success: true });
-}
+  try {
+    if (!userID || !transactionID || !currencyAmount || !hash)
+      return res.status(400).send("Missing params");
+
+    const computedHash = crypto
+      .createHash("sha256")
+      .update(userID + currencyAmount + SECRET_KEY)
+      .digest("hex");
+
+    if (computedHash !== hash)
+      return res.status(400).send("Invalid hash");
+
+    // 🔒 Anti-doublon Firebase
+    const txSnap = await transactionsRef.child(transactionID).get();
+    if (txSnap.exists())
+      return res.status(200).send("duplicate");
+
+    const amount = Math.round(Number(currencyAmount));
+    if (isNaN(amount) || amount <= 0)
+      return res.status(400).send("Invalid amount");
+
+    // Enregistre la transaction
+    await transactionsRef.child(transactionID).set({
+      userID,
+      amount,
+      type,
+      date: Date.now()
+    });
+
+    // 🔥 Crédit Firebase (atomique)
+    const balanceRef = db.ref("users/" + userID + "/balance");
+    await balanceRef.transaction(current => (current || 0) + amount);
+
+    console.log(`✅ Timewall → Firebase ${userID} +${amount}`);
+    res.status(200).send("OK");
+
+  } catch (err) {
+    console.error("Timewall error:", err);
+    res.status(500).send("Server error");
+  }
+});

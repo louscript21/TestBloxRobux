@@ -50,28 +50,46 @@ app.get("/api/avatar/:username", async (req, res) => {
 
 // --- Endpoint TimeWall ---
 app.get("/timewall", async (req, res) => {
-    const { targetId, transactionID, revenue, currencyAmount, hash, type } = req.query;
+    const { userID, transactionID, currencyAmount, hash, type } = req.query;
 
     try {
-        const computedHash = crypto.createHash("sha256")
-            .update(targetId + revenue + SECRET_KEY)
+        if (!userID || !transactionID || !currencyAmount || !hash)
+            return res.status(400).send("Missing params");
+
+        const computedHash = crypto
+            .createHash("sha256")
+            .update(userID + currencyAmount + SECRET_KEY)
             .digest("hex");
 
-        if (computedHash !== hash) return res.status(400).send("Invalid hash");
-        if (transactions[transactionID]) return res.status(200).send("duplicate");
+        if (computedHash !== hash)
+            return res.status(400).send("Invalid hash");
 
-        transactions[transactionID] = { targetId, revenue, currencyAmount, type, date: Date.now() };
-        if (!users[targetId]) users[targetId] = { balance: 0 };
-        users[targetId].balance += Number(currencyAmount);
+        if (transactions[transactionID])
+            return res.status(200).send("duplicate");
 
-        console.log(`✅ User ${targetId} new balance: ${users[targetId].balance}`);
+        const amount = parseInt(currencyAmount, 10);
+        if (isNaN(amount))
+            return res.status(400).send("Invalid amount");
+
+        transactions[transactionID] = {
+            userID,
+            amount,
+            type,
+            date: Date.now()
+        };
+
+        if (!users[userID]) users[userID] = { balance: 0 };
+        users[userID].balance += amount;
+
+        console.log(`✅ Timewall → User ${userID} +${amount} (${users[userID].balance})`);
         res.status(200).send("OK");
 
     } catch (err) {
-        console.error(err);
+        console.error("Timewall error:", err);
         res.status(500).send("Server error");
     }
 });
+
 
 // --- Endpoint Admin ---
 const ADMIN_CODE = process.env.ADMIN_CODE || "8SJhLs9SW2ckPfj";
