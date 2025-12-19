@@ -1,6 +1,6 @@
 const API_BASE_URL = location.hostname === "localhost"
   ? "http://localhost:3000"
-  : "https://blox-robux.onrender.com";
+  : "https://testbloxrobux.onrender.com";
 
 document.addEventListener("DOMContentLoaded", () => {
   const auth = firebase.auth();
